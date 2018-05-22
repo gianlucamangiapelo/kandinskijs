@@ -19,6 +19,10 @@
 	},
 	"homepage": "https://github.com/gian8/microservices-basecode#readme",
 	"devDependencies": {
+		"chai": "^4.1.2",
 		"hapi": "^17.5.0"
+	},
+	"dependencies": {
+		"mocha": "^5.2.0"
 	}
 }
