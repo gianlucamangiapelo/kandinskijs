@@ -1,20 +1,21 @@
 {
-  "name": "microservices-basecode",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gian8/microservices-basecode.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/gian8/microservices-basecode/issues"
-  },
-  "homepage": "https://github.com/gian8/microservices-basecode#readme"
+	"name": "microservices-basecode",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "nodemon src/index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/gian8/microservices-basecode.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/gian8/microservices-basecode/issues"
+	},
+	"homepage": "https://github.com/gian8/microservices-basecode#readme"
 }
