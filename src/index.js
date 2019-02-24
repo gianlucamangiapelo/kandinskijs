@@ -11,7 +11,7 @@ const init = async () => {
 			method: 'GET',
 			path: '/',
 			handler: (req, reply) => {
-				return "<h1>MicroServices Basecode</h1>";
+				return "<h2>Schedule</h2>";
 			}
 		}
 	]);
