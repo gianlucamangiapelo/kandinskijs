@@ -1,0 +1,15 @@
+h2 {
+	color: #ffffff;
+	font-size: 64px;
+	margin-top: 20px;
+	margin-bottom: 15%;
+	display: block;
+}
+
+@media screen and (max-width: 768px){
+
+	h2 {
+		display: flex;
+	}
+
+}
