@@ -1,7 +1,7 @@
 {
-	"name": "microservices-basecode",
+	"name": "css-unit-test",
 	"version": "1.0.0",
-	"description": "Basecode for microservices architecture",
+	"description": "Plugin to unit test css",
 	"main": "index.js",
 	"scripts": {
 		"test": "./node_modules/.bin/mocha",
@@ -9,18 +9,19 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/gian8/microservices-basecode.git"
+		"url": "git+https://github.com/gian8/css-unit-test.git"
 	},
 	"keywords": [],
 	"author": "Gianluca Mangiapelo",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/gian8/microservices-basecode/issues"
+		"url": "https://github.com/gian8/css-unit-test/issues"
 	},
-	"homepage": "https://github.com/gian8/microservices-basecode#readme",
+	"homepage": "https://github.com/gian8/css-unit-test#readme",
 	"devDependencies": {
 		"chai": "^4.1.2",
-		"hapi": "^17.5.0"
+		"hapi": "^17.5.0",
+		"puppeteer": "^1.12.2"
 	},
 	"dependencies": {
 		"mocha": "^5.2.0"
