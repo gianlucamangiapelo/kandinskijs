@@ -1,5 +1,5 @@
 module.exports = {
-	hexTorgb: function (hex) {
+	hexToRgb: function (hex) {
 		const hs = hex[0] === '#' ? hex.slice(1) : hex;
 		return [
 			parseInt(hs[0] + hs[1], 16),
@@ -7,7 +7,7 @@ module.exports = {
 			parseInt(hs[4] + hs[5], 16)
 		];
 	},
-	rgbTohex: function (rgb) {
+	rgbToHex: function (rgb) {
 		rgb.reduce((hex, c) => hex + padHex(c.toString(16)), '#');
 	}
 };
