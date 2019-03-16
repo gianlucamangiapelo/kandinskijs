@@ -8,7 +8,7 @@
 	"editor.formatOnType": true,
 	"editor.formatOnSave": true,
 	"editor.wordWrap": "off",
-	"editor.tabSize": 2,
+	"editor.tabSize": 1,
 	"files.trimTrailingWhitespace": true,
 	"files.autoSave": "off",
 	"javascript.validate.enable": false,
