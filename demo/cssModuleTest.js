@@ -1,5 +1,6 @@
 var expect = require("chai").expect;
 const pup = require("../src/pupPlugin");
+const cssHelper = require("../src/cssHelper");
 
 describe("h2 css test", function () {
   let page;
@@ -57,10 +58,16 @@ describe("h2 css test", function () {
       expect(display).to.eql("block");
     });
 
-    it("should have a heading color", async function () {
+    it("should have a heading color rgb", async function () {
       const color = await pup.getCSSProperty(page, "h2", "color");
 
       expect(color).to.eql("rgb(255, 255, 255)");
+    });
+
+    it("should have a heading color hex", async function () {
+      const color = await pup.getCSSProperty(page, "h2", "color");
+
+      expect(cssHelper.rgbToHex(color)).to.eql("#ffffff");
     });
 
     it("should have a margin-top: 20px", async function () {
@@ -68,7 +75,6 @@ describe("h2 css test", function () {
 
       expect(marginTop).to.eql("20px");
     });
-
 
     it("should have a font-size: 64px", async function () {
       const fontSize = await pup.getCSSProperty(page, "h2", "fontSize");
