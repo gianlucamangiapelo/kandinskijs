@@ -1,5 +1,5 @@
-# Css unit testing
-Use **mocha/chai** and **puppeteer** to do visual regression testing.
+# kandinski.js
+Use **mocha/chai** and **puppeteer** to do css unit testing.
 
 *To do:*
 - Add helper to map percentage value in pixel value based on viewport
