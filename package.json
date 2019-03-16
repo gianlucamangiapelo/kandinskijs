@@ -1,28 +1,28 @@
 {
-	"name": "css-unit-test",
-	"version": "1.0.0",
-	"description": "Plugin to unit test css",
-	"main": "demo/index.js",
-	"scripts": {
-		"demo-test": "./node_modules/.bin/mocha demo/cssModuleTest.js",
-		"demo-start": "nodemon demo/index.js",
-		"test": "./node_modules/.bin/mocha test/pupPluginTest.js"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/gian8/css-unit-test.git"
-	},
-	"keywords": [],
-	"author": "Gianluca Mangiapelo",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/gian8/css-unit-test/issues"
-	},
-	"homepage": "https://github.com/gian8/css-unit-test#readme",
-	"devDependencies": {
-		"chai": "^4.1.2",
-		"hapi": "^17.5.0",
-		"puppeteer": "^1.12.2",
-		"mocha": "^5.2.0"
-	}
+  "name": "css-unit-test",
+  "version": "1.0.0",
+  "description": "Plugin to unit test css",
+  "main": "demo/index.js",
+  "scripts": {
+    "demo-test": "./node_modules/.bin/mocha demo/cssModuleTest.js",
+    "demo-start": "nodemon demo/index.js",
+    "test": "./node_modules/.bin/mocha test/*Test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gian8/css-unit-test.git"
+  },
+  "keywords": [],
+  "author": "Gianluca Mangiapelo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gian8/css-unit-test/issues"
+  },
+  "homepage": "https://github.com/gian8/css-unit-test#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "hapi": "^17.5.0",
+    "puppeteer": "^1.12.2",
+    "mocha": "^5.2.0"
+  }
 }
