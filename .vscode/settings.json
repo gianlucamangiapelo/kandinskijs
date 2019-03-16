@@ -1,16 +1,16 @@
 {
 	"git.confirmSync": false,
-	"editor.insertSpaces": false,
+	"editor.insertSpaces": true,
 	"editor.fontLigatures": true,
 	"editor.renderIndentGuides": true,
 	"editor.detectIndentation": false,
 	"editor.renderWhitespace": "boundary",
 	"editor.formatOnType": true,
 	"editor.formatOnSave": true,
+	"editor.tabSize": 2,
 	"editor.wordWrap": "off",
-	"editor.tabSize": 1,
 	"files.trimTrailingWhitespace": true,
 	"files.autoSave": "off",
 	"javascript.validate.enable": false,
-	"eslint.autoFixOnSave": true,
+	"eslint.autoFixOnSave": true
 }
