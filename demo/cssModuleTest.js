@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
 const kisk = require("../src/kandinski");
-const cssHelper = require("../src/cssHelper");
+const cssHelper = kisk.cssHelper;
 
 describe("h2 css test", function () {
   let page;

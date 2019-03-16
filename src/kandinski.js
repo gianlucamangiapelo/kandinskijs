@@ -1,4 +1,5 @@
 const puppeteer = require("puppeteer");
+const cssHelper = require("./cssHelper");
 
 async function initBrowser() {
   const browser = await puppeteer.launch();
@@ -17,6 +18,7 @@ async function getPage(viewport) {
 }
 
 module.exports = {
+  cssHelper: cssHelper,
   browser: undefined,
   url: undefined,
   cssPath: undefined,
