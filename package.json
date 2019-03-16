@@ -1,7 +1,7 @@
 {
-  "name": "css-unit-test",
-  "version": "1.0.0",
-  "description": "Plugin to unit test css",
+  "name": "kandinski.js",
+  "version": "0.1.0",
+  "description": "js library to unit test css",
   "main": "demo/index.js",
   "scripts": {
     "demo-test": "./node_modules/.bin/mocha demo/cssModuleTest.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gian8/css-unit-test.git"
+    "url": "git+https://github.com/gian8/kandinskijs.git"
   },
   "keywords": [],
   "author": "Gianluca Mangiapelo",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/gian8/css-unit-test/issues"
+    "url": "https://github.com/gian8/kandinskijs/issues"
   },
-  "homepage": "https://github.com/gian8/css-unit-test#readme",
+  "homepage": "https://github.com/gian8/kandinskijs#readme",
   "devDependencies": {
     "chai": "^4.1.2",
     "hapi": "^17.5.0",
