@@ -69,11 +69,6 @@ describe("h2 css test", function () {
 			expect(marginTop).to.eql("20px");
 		});
 
-		it("should have a margin-bottom: 15%", async function () {
-			const marginBottom = await pup.getCSSProperty(page, "h2", "marginBottom");
-
-			expect(marginBottom).to.eql("15%");
-		});
 
 		it("should have a font-size: 64px", async function () {
 			const fontSize = await pup.getCSSProperty(page, "h2", "fontSize");
@@ -82,7 +77,7 @@ describe("h2 css test", function () {
 		});
 		it("should have a heading", async function () {
 			const HEADING_SELECTOR = "h2";
-			const headingText = pup.getInnerText(page, HEADING_SELECTOR);
+			const headingText = await pup.getInnerText(page, HEADING_SELECTOR);
 			expect(headingText).to.eql("Schedule");
 		});
 	});
