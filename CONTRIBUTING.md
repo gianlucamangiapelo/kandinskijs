@@ -38,7 +38,6 @@ Sending a Pull Request
 2. Run `yarn install` in the repository root.
 3. If you’ve fixed a bug or added code that should be tested, add tests!
 4. Run `yarn test` to run test suite.
-5. Format your code with prettier (yarn prettier).
 
 Be sure to reference the original issue in the pull request.
 Expect some back-and-forth with regards to style and compliance of these
