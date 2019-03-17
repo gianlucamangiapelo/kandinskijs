@@ -1,20 +1,25 @@
 {
   "name": "kandinskijs",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "js library to unit test css",
   "main": "src/kandinski.js",
   "scripts": {
-    "demo-test": "./node_modules/.bin/mocha demo/cssModuleTest.js",
-    "demo-start": "nodemon demo/index.js",
+    "demo-test": "./node_modules/.bin/mocha demo/cssTest.js --timeout 100000",
+    "demo-server": "nodemon demo/index.js",
     "test": "./node_modules/.bin/mocha test/*Test.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gian8/kandinskijs.git"
   },
-  "keywords": [],
+  "keywords": [
+    "kandinskijs",
+    "kandinski",
+    "unit-test",
+    "css"
+  ],
   "author": "Gianluca Mangiapelo",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/gian8/kandinskijs/issues"
   },
