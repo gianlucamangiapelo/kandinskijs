@@ -6,7 +6,7 @@ describe("h2 css test", function () {
   let page;
 
   const url = "http://localhost:4000";
-  const cssPath = "demo/base.css";
+  const cssPath = "demo/localBase.css";
 
   before(async function () {
     await kisk.init(url, cssPath);
@@ -18,7 +18,6 @@ describe("h2 css test", function () {
 
   context("mobile viewport", function () {
     before(async function () {
-      this.timeout(1000000);
       page = await kisk.getPage({ width: 320, height: 1 });
     });
     after(async function () {
@@ -28,7 +27,6 @@ describe("h2 css test", function () {
 
   context("tablet viewport", function () {
     before(async function () {
-      this.timeout(1000000);
       page = await kisk.getPage({ width: 768, height: 1 });
     });
     after(async function () {
@@ -44,7 +42,6 @@ describe("h2 css test", function () {
 
   context("desktop viewport", function () {
     before(async function () {
-      this.timeout(1000000);
       page = await kisk.getPage({ width: 1024, height: 1 });
       //await page.screenshot({ path: 'page.png' })
     });
@@ -81,10 +78,11 @@ describe("h2 css test", function () {
 
       expect(fontSize).to.eql("64px");
     });
-    it("should have a heading", async function () {
+    it("should have a heading text = Kandinskijs", async function () {
       const HEADING_SELECTOR = "h2";
       const headingText = await kisk.getInnerText(page, HEADING_SELECTOR);
-      expect(headingText).to.eql("Schedule");
+
+      expect(headingText).to.eql("Kandinskijs");
     });
   });
 });
