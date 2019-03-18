@@ -30,7 +30,7 @@ module.exports = {
     await page.addStyleTag({
       path: this.cssPath
     });
-    await page.waitFor(100);
+
     this.page = page;
   },
   getInnerText: async function (querySelector) {
