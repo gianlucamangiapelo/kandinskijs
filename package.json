@@ -4,7 +4,7 @@
   "description": "js library to unit test css",
   "main": "src/kandinski.js",
   "scripts": {
-    "demo-test": "./node_modules/.bin/mocha demo/cssTest.js --timeout 100000",
+    "demo-test": "./node_modules/.bin/mocha demo/*KTest.js --timeout 100000",
     "demo-server": "nodemon demo/index.js",
     "test": "./node_modules/.bin/mocha test/*Test.js"
   },
