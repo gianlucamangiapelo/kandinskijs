@@ -14,8 +14,11 @@ module.exports = {
   cssHelper: cssHelper,
   init: async function (url, cssPath) {
     this.browser = await initBrowser();
-    this.url = url;
     this.cssPath = cssPath;
+    if (!url) {
+      throw new Error("url is undefined");
+    }
+    this.url = url;
   },
   destroy: async function () {
     if (!this.browser) {
