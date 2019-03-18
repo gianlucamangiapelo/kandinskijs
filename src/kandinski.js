@@ -6,22 +6,12 @@ async function initBrowser() {
   return browser;
 }
 
-async function getPage(viewport) {
-  let page = await this.browser.newPage();
-  await page.setViewport(viewport);
-  await page.goto(this.url);
-  await page.addStyleTag({
-    path: this.cssPath
-  });
-  await page.waitFor(100);
-  return page;
-}
-
 module.exports = {
-  cssHelper: cssHelper,
   browser: undefined,
+  page: undefined,
   url: undefined,
   cssPath: undefined,
+  cssHelper: cssHelper,
   init: async function (url, cssPath) {
     this.browser = await initBrowser();
     this.url = url;
@@ -33,17 +23,30 @@ module.exports = {
     }
     this.browser.close();
   },
-  getPage: getPage,
-  getInnerText: async function (page, querySelector) {
-    await page.waitFor(querySelector);
-    return await page.$eval(querySelector, element => element.innerText);
+  getPage: async function getPage(viewport) {
+    const page = await this.browser.newPage();
+    await page.setViewport(viewport);
+    await page.goto(this.url);
+    await page.addStyleTag({
+      path: this.cssPath
+    });
+    await page.waitFor(100);
+    this.page = page;
   },
-  getCSSProperty: async function (page, querySelector, property) {
-    if (!page) {
+  getInnerText: async function (querySelector) {
+    const _page = this.page;
+    if (!_page) {
       throw new Error("page is undefined");
     }
-
-    return await page.evaluate((querySelector, property) => {
+    await _page.waitFor(querySelector);
+    return await _page.$eval(querySelector, element => element.innerText);
+  },
+  getCSSProperty: async function (querySelector, property) {
+    const _page = this.page;
+    if (!_page) {
+      throw new Error("page is undefined");
+    }
+    return await _page.evaluate((querySelector, property) => {
       const element = document.querySelector(querySelector);
       if (!element) {
         throw new Error(
