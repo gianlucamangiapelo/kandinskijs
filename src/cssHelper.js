@@ -20,7 +20,7 @@ const rgbStringToArray = function (rgbString) {
 
   let rgbArray = [];
   let matches;
-  const regex = /rgb\(([0-9]{3}),([0-9]{3}),([0-9]{3})\)/gm;
+  const regex = /rgb\(([0-9]{1,3}),([0-9]{1,3}),([0-9]{1,3})\)/gm;
 
   rgbString = rgbString.replace(/\s+/g, "");
 
