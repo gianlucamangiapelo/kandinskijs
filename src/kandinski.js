@@ -30,9 +30,11 @@ module.exports = {
     const page = await this.browser.newPage();
     await page.setViewport(viewport);
     await page.goto(this.url);
-    await page.addStyleTag({
-      path: this.cssPath
-    });
+    if (this.cssPath) {
+      await page.addStyleTag({
+        path: this.cssPath
+      });
+    }
 
     this.page = page;
   },
