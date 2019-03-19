@@ -31,7 +31,7 @@ describe("kandinskijs", function () {
 
 
   //
-  //Method declaration
+  //Methods declaration
   //
   context("module methods", function () {
     it("should have init method", function () {
@@ -58,6 +58,17 @@ describe("kandinskijs", function () {
       const getCSSProperty = "getCSSProperty";
       expect(kisk).to.have.ownProperty(getCSSProperty);
       expect(kisk.getCSSProperty).to.be.a("function");
+    });
+  });
+
+
+  //
+  //Helpers declaration
+  //
+  context("module helpers", function () {
+    it("should have cssHelper", function () {
+      const cssHelper = "cssHelper";
+      expect(kisk).to.have.property(cssHelper);
     });
   });
 
@@ -101,5 +112,19 @@ describe("kandinskijs", function () {
         done();
       });
     });
+  });
+
+
+
+  //
+  //getPage()
+  //
+  context("getPage", function () {
+    beforeEach(function () {
+      kisk.init("http://website.com");
+    });
+    afterEach(function () {
+      kisk.destroy();
+    })
   });
 });
