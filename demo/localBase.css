@@ -2,8 +2,12 @@ h2 {
 	color: #ffffff;
 	font-size: 64px;
 	margin-top: 20px;
-	margin-bottom: 15%;
+  margin-bottom: 15%;
+  width: 20%;
 	display: block;
+}
+div{
+  width: 83%;
 }
 
 @media screen and (max-width: 768px){
