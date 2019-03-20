@@ -1,16 +1,12 @@
 const puppeteer = require("puppeteer");
 const cssHelper = require("./cssHelper");
 
-async function initBrowser() {
-  const browser = await puppeteer.launch();
-  return browser;
-}
-
 module.exports = {
   browser: undefined,
   page: undefined,
   url: undefined,
   cssPath: undefined,
+  parentNode: undefined,
   cssHelper: cssHelper,
   init: async function (url, cssPath) {
     this.browser = await initBrowser();
@@ -51,6 +47,9 @@ module.exports = {
     if (!_page) {
       throw new Error("page is undefined");
     }
+
+    this.parentNode = await getParentNode(_page, querySelector);
+
     return await _page.evaluate((querySelector, property) => {
       const element = document.querySelector(querySelector);
       if (!element) {
@@ -61,4 +60,16 @@ module.exports = {
       return JSON.parse(JSON.stringify(getComputedStyle(element)[property]));
     }, querySelector, property);
   }
+};
+
+
+async function initBrowser() {
+  const browser = await puppeteer.launch();
+  return browser;
+}
+
+async function getParentNode(page, querySelector) {
+  const selector = await page.$(querySelector);
+  const parent = await page.evaluateHandle(el => el.parentElement, selector);
+  return await parent.boundingBox();
 };
