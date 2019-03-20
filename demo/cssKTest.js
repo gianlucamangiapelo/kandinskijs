@@ -66,6 +66,12 @@ describe("h2 css test", function () {
       expect(marginTop).to.eql("20px");
     });
 
+    it("should have a width: 20%", async function () {
+      const widthPx = await kisk.getCSSProperty("h2", "width");
+      const widthPerc = cssHelper.pxToPerc(widthPx, kisk.parentNode.width);
+      expect(widthPerc).to.eql("20%");
+    });
+
     it("should have a font-size: 64px", async function () {
       const fontSize = await kisk.getCSSProperty("h2", "fontSize");
       expect(fontSize).to.eql("64px");
