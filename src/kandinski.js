@@ -6,7 +6,7 @@ module.exports = {
   page: undefined,
   url: undefined,
   cssPath: undefined,
-  parentNode: undefined,
+  parentBoxModel: undefined,
   cssHelper: cssHelper,
   init: async function (url, cssPath) {
     this.browser = await initBrowser();
@@ -48,7 +48,7 @@ module.exports = {
       throw new Error("page is undefined");
     }
 
-    this.parentNode = await getParentNode(_page, querySelector);
+    this.parentBoxModel = await getParentNode(_page, querySelector);
 
     return await _page.evaluate((querySelector, property) => {
       const element = document.querySelector(querySelector);
@@ -71,5 +71,5 @@ async function initBrowser() {
 async function getParentNode(page, querySelector) {
   const selector = await page.$(querySelector);
   const parent = await page.evaluateHandle(el => el.parentElement, selector);
-  return await parent.boundingBox();
+  return await parent.boxModel();
 };
