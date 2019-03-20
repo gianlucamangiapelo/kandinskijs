@@ -1,31 +1,20 @@
 const puppeteer = require("puppeteer");
 const cssHelper = require("./cssHelper");
 
-async function initBrowser() {
-  const browser = await puppeteer.launch();
-  return browser;
-}
-
-async function getPage(viewport) {
-  let page = await this.browser.newPage();
-  await page.setViewport(viewport);
-  await page.goto(this.url);
-  await page.addStyleTag({
-    path: this.cssPath
-  });
-  await page.waitFor(100);
-  return page;
-}
-
 module.exports = {
-  cssHelper: cssHelper,
   browser: undefined,
+  page: undefined,
   url: undefined,
   cssPath: undefined,
+  parentBoxModel: undefined,
+  cssHelper: cssHelper,
   init: async function (url, cssPath) {
     this.browser = await initBrowser();
-    this.url = url;
     this.cssPath = cssPath;
+    if (!url) {
+      throw new Error("url is undefined");
+    }
+    this.url = url;
   },
   destroy: async function () {
     if (!this.browser) {
@@ -33,17 +22,35 @@ module.exports = {
     }
     this.browser.close();
   },
-  getPage: getPage,
-  getInnerText: async function (page, querySelector) {
-    await page.waitFor(querySelector);
-    return await page.$eval(querySelector, element => element.innerText);
+  getPage: async function getPage(viewport) {
+    const page = await this.browser.newPage();
+    await page.setViewport(viewport);
+    await page.goto(this.url);
+    if (this.cssPath) {
+      await page.addStyleTag({
+        path: this.cssPath
+      });
+    }
+
+    this.page = page;
   },
-  getCSSProperty: async function (page, querySelector, property) {
-    if (!page) {
+  getInnerText: async function (querySelector) {
+    const _page = this.page;
+    if (!_page) {
+      throw new Error("page is undefined");
+    }
+    await _page.waitFor(querySelector);
+    return await _page.$eval(querySelector, element => element.innerText);
+  },
+  getCSSProperty: async function (querySelector, property) {
+    const _page = this.page;
+    if (!_page) {
       throw new Error("page is undefined");
     }
 
-    return await page.evaluate((querySelector, property) => {
+    this.parentBoxModel = await getParentNode(_page, querySelector);
+
+    return await _page.evaluate((querySelector, property) => {
       const element = document.querySelector(querySelector);
       if (!element) {
         throw new Error(
@@ -53,4 +60,16 @@ module.exports = {
       return JSON.parse(JSON.stringify(getComputedStyle(element)[property]));
     }, querySelector, property);
   }
+};
+
+
+async function initBrowser() {
+  const browser = await puppeteer.launch();
+  return browser;
+}
+
+async function getParentNode(page, querySelector) {
+  const selector = await page.$(querySelector);
+  const parent = await page.evaluateHandle(el => el.parentElement, selector);
+  return await parent.boxModel();
 };

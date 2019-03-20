@@ -10,8 +10,20 @@ module.exports = {
   rgbToHex: function (rgbString) {
     let rgbArray = rgbStringToArray(rgbString);
     return rgbArray.reduce((hex, c) => hex + padHex(c.toString(16)), '#');
+  },
+  pxToPerc: function (pxSelector, pxParent) {
+    const intPxSelector = parsePx(pxSelector);
+    return Math.ceil((parseFloat(intPxSelector / pxParent) * 100)).toString().concat("%");
   }
 };
+
+const parsePx = function (pxString) {
+  const regex = /[0-9]+/gm;
+  let match = regex.exec(pxString);
+  if (match != null) {
+    return match;
+  }
+}
 
 const rgbStringToArray = function (rgbString) {
   if (typeof (rgbString) != "string") {
@@ -20,7 +32,7 @@ const rgbStringToArray = function (rgbString) {
 
   let rgbArray = [];
   let matches;
-  const regex = /rgb\(([0-9]{3}),([0-9]{3}),([0-9]{3})\)/gm;
+  const regex = /rgb\(([0-9]{1,3}),([0-9]{1,3}),([0-9]{1,3})\)/gm;
 
   rgbString = rgbString.replace(/\s+/g, "");
 
