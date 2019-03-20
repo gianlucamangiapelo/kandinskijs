@@ -22,6 +22,14 @@ describe("h2 css test", function () {
     after(async function () {
       await kisk.page.close();
     });
+    it("h2 should have a margin: auto", async function () {
+      const margin = await kisk.getCSSProperty("h2", "margin");
+      expect(margin).to.eql("0px");
+    });
+    it("h2 should have a text-align: center", async function () {
+      const margin = await kisk.getCSSProperty("h2", "text-align");
+      expect(margin).to.eql("center");
+    });
   });
 
   context("tablet viewport", function () {
@@ -68,7 +76,7 @@ describe("h2 css test", function () {
 
     it("should have a width: 20%", async function () {
       const widthPx = await kisk.getCSSProperty("h2", "width");
-      const widthPerc = cssHelper.pxToPerc(widthPx, kisk.parentNode.width);
+      const widthPerc = cssHelper.pxToPerc(widthPx, kisk.parentBoxModel.width);
       expect(widthPerc).to.eql("20%");
     });
 

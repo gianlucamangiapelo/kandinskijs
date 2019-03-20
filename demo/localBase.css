@@ -4,7 +4,8 @@ h2 {
 	margin-top: 20px;
   margin-bottom: 15%;
   width: 20%;
-	display: block;
+  display: block;
+  height: 100%;
 }
 div{
   width: 83%;
@@ -14,6 +15,15 @@ div{
 
 	h2 {
 		display: flex;
+	}
+
+}
+
+@media screen and (max-width: 350px){
+
+	h2 {
+    margin: 0;
+    text-align: center;
 	}
 
 }
