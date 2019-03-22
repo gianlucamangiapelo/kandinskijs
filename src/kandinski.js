@@ -59,6 +59,26 @@ module.exports = {
       }
       return JSON.parse(JSON.stringify(getComputedStyle(element)[property]));
     }, querySelector, property);
+  },
+  getPctCSSProperty: async function (querySelector, property) {
+    const _page = this.page;
+    if (!_page) {
+      throw new Error("page is undefined");
+    }
+
+    this.parentBoxModel = await getParentNode(_page, querySelector);
+
+    var propValue = await _page.evaluate((querySelector, property) => {
+      const element = document.querySelector(querySelector);
+      if (!element) {
+        throw new Error(
+          "Element with querySelector " + querySelector + " not found"
+        );
+      }
+      return JSON.parse(JSON.stringify(getComputedStyle(element)[property]));
+    }, querySelector, property);
+
+    return cssHelper.pxToPerc(propValue, this.parentBoxModel[property]);
   }
 };
 
@@ -70,6 +90,10 @@ async function initBrowser() {
 
 async function getParentNode(page, querySelector) {
   const selector = await page.$(querySelector);
-  const parent = await page.evaluateHandle(el => el.parentElement, selector);
-  return await parent.boxModel();
+  try {
+    const parent = await page.evaluateHandle(el => el.parentElement, selector);
+    return await parent.boxModel();
+  } catch (error) {
+    return undefined;
+  }
 };
