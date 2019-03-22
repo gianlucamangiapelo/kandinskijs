@@ -1,13 +1,10 @@
 # kandinski.js
 js library to unit test css.
 
-## Getting Started
+## Why kandinski.js
 
-These instructions will get you a copy of the project up and running on your local machine.
-
-### Prerequisites
-- yarn
-- node
+Why not!
+The main goal of kandinski.js is to use the power and stability of unit test to test your Application css and avoid unexpected issues or regression.
 
 ### Installing
 
@@ -21,7 +18,6 @@ $ yarn add kandinskijs
 const kisk = require("kandinskijs");
 
 describe("component css test", function () {
-  let page;
   const url = "https://siteurl.com";
   const localCssPath = "path/local.css";
 
@@ -36,10 +32,10 @@ describe("component css test", function () {
   context("mobile viewport", function () {
     before(async function () {
       const mobileViewport = { width: 320, height: 1 };
-      page = await kisk.getPage(mobileViewport);
+      await kisk.getPage(mobileViewport);
     });
     after(async function () {
-      await page.close();
+      await kisk.page.close();
     });
     it("h2 should have a display: flex", async function () {
       const selector = ".component";
@@ -53,32 +49,45 @@ describe("component css test", function () {
 ```
 Run the [demo](#demo) locally to try it on your local machine.
 
-## Main Features
-**init**
+## API
+**init** -
+Initialize kandinskijs with the url of your application and add to the page your local css.
 ```javascript
 .init(url,cssPath)
 ```
-**destroy**
+**destroy** -
+Destroy the kandinskijs instance.
 ```javascript
 .destroy()
 ```
-**getPage**
+**getPage** -
+Get the page with a specific viewport, and set kandinskijs page property.
 ```javascript
 .getPage(viewport)
 ```
-**getCSSProperty**
+**getCSSProperty** -
+Return the css property value associated to querySelector
 ```javascript
-.getCSSProperty(page, querySelector, property)
+.getCSSProperty(querySelector, property)
 ```
-**getInnerText**
+**getPctCSSProperty** -
+Return the css property value associated to querySelector expressed in percentage, value ammitted for property parameters are [width,height].
 ```javascript
-.getInnerText(page, querySelector)
+.getPctCSSProperty(querySelector, property)
 ```
+**getInnerText** -
+Return the text of the querySelector specified.
+```javascript
+.getInnerText(querySelector)
+```
+
+**cssHelper** -
+documentation in progress ...
 
 ## Demo
 You can find demo files under **/demo** folder.
 
-- `<h2>Kandinskijs</h2>` html element under test.
+- `<div><h2>Kandinskijs</h2></div>` html element under test.
 - local css defined in `localBase.css`.
 - test suite, using kandinskijs, is defined in `cssTest.js`
 
@@ -106,5 +115,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](https://gi
 
 
 *Future implementation:*
-- Add helper to map percentage value in pixel value based on parent
 - Add css code coverage index
