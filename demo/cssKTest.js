@@ -30,6 +30,10 @@ describe("h2 css test", function () {
       const margin = await kisk.getCSSProperty("h2", "text-align");
       expect(margin).to.eql("center");
     });
+    it("h2 should have a width: 33%", async function () {
+      const width = await kisk.getPctCSSProperty("h2", "width");
+      expect(width).to.eql("33%");
+    });
   });
 
   context("tablet viewport", function () {
