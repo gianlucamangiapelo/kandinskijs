@@ -1,5 +1,6 @@
 var expect = require("chai").expect;
 const kisk = require("../src/kandinski");
+const sinon = require("sinon");
 
 describe("kandinskijs", function () {
   it("should exist", function () {
@@ -120,11 +121,57 @@ describe("kandinskijs", function () {
   //getPage()
   //
   context("getPage", function () {
-    beforeEach(function () {
-      kisk.init("http://website.com");
-    });
     afterEach(function () {
       kisk.destroy();
-    })
+    });
+
+    it("should throw error because kisk has not been initialized", function (done) {
+      reset(kisk);
+      kisk.getPage({}).catch(function (error) {
+        expect(error).to.be.not.undefined;
+        expect(error.message).to.be.equal("browser is not initialized");
+        done();
+      });
+    });
+
+    it("should throw error because viewport has not been passed", function (done) {
+      kisk.init("http://website.com").then(function () {
+        kisk.getPage().catch(function (error) {
+          expect(error).to.be.not.undefined;
+          expect(error.message).to.be.equal("viewport has not been defined");
+          done();
+        });
+      });
+    });
+
+    it("should throw error because viewport.width has not been defined", function (done) {
+      const viewport = {};
+      kisk.init("http://website.com").then(function () {
+        kisk.getPage(viewport).catch(function (error) {
+          expect(error).to.be.not.undefined;
+          expect(error.message).to.be.equal("viewport.width has not been defined");
+          done();
+        });
+      });
+    });
+
+    it("should throw error because viewport.height has not been defined", function (done) {
+      const viewport = { width: 320 };
+      kisk.init("http://website.com").then(function () {
+        kisk.getPage(viewport).catch(function (error) {
+          expect(error).to.be.not.undefined;
+          expect(error.message).to.be.equal("viewport.height has not been defined");
+          done();
+        });
+      });
+    });
   });
 });
+
+const reset = function (kisk) {
+  kisk.browser = undefined;
+  kisk.page = undefined;
+  kisk.url = undefined;
+  kisk.cssPath = undefined;
+  kisk.parentBoxModel = undefined;
+}
