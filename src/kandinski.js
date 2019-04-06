@@ -23,6 +23,22 @@ module.exports = {
     this.browser.close();
   },
   getPage: async function getPage(viewport) {
+    if (!this.browser) {
+      throw new Error("browser is not initialized");
+    }
+
+    if (!viewport) {
+      throw new Error("viewport has not been defined");
+    }
+
+    if (!viewport["width"]) {
+      throw new Error("viewport.width has not been defined");
+    }
+
+    if (!viewport["height"]) {
+      throw new Error("viewport.height has not been defined");
+    }
+
     const page = await this.browser.newPage();
     await page.setViewport(viewport);
     await page.goto(this.url);
