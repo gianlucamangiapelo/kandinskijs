@@ -60,6 +60,11 @@ describe("kandinskijs", function () {
       expect(kisk).to.have.ownProperty(getCSSProperty);
       expect(kisk.getCSSProperty).to.be.a("function");
     });
+    it("should have getPctCSSProperty method", function () {
+      const getCSSProperty = "getPctCSSProperty";
+      expect(kisk).to.have.ownProperty(getCSSProperty);
+      expect(kisk.getCSSProperty).to.be.a("function");
+    });
   });
 
 
