@@ -1,14 +1,18 @@
 const puppeteer = require("puppeteer");
 const cssHelper = require("./cssHelper");
-
+const collector = require("./collector");
+const debug = require("debug");
+const dbg = debug("kandinskijs:main");
 module.exports = {
   browser: undefined,
   page: undefined,
   url: undefined,
   cssPath: undefined,
   parentBoxModel: undefined,
+  viewport: undefined,
   cssHelper: cssHelper,
-  init: async function (url, cssPath) {
+  collector: collector,
+  init: async function(url, cssPath) {
     this.browser = await initBrowser();
     this.cssPath = cssPath;
     if (!url) {
@@ -16,13 +20,15 @@ module.exports = {
     }
     this.url = url;
   },
-  destroy: async function () {
+  destroy: async function() {
     if (!this.browser) {
       return;
     }
+    this.collector.destroy();
     this.browser.close();
   },
-  getPage: async function getPage(viewport) {
+  getPage: async function(viewport) {
+    this.viewport = undefined;
     if (!this.browser) {
       throw new Error("browser is not initialized");
     }
@@ -40,6 +46,9 @@ module.exports = {
     }
 
     const page = await this.browser.newPage();
+    page.on("console", msg => console.log("PAGE LOG:", msg.text));
+    await page.exposeFunction("dbg", dbg);
+
     await page.setViewport(viewport);
     await page.goto(this.url);
     if (this.cssPath) {
@@ -47,10 +56,11 @@ module.exports = {
         path: this.cssPath
       });
     }
-
+    await this.collector.init(page, viewport, this.cssPath);
+    this.viewport = viewport;
     this.page = page;
   },
-  getInnerText: async function (querySelector) {
+  getInnerText: async function(querySelector) {
     const _page = this.page;
     if (!_page) {
       throw new Error("page is undefined");
@@ -58,46 +68,59 @@ module.exports = {
     await _page.waitFor(querySelector);
     return await _page.$eval(querySelector, element => element.innerText);
   },
-  getCSSProperty: async function (querySelector, property) {
+  getCSSProperty: async function(querySelector, property) {
     const _page = this.page;
     if (!_page) {
       throw new Error("page is undefined");
     }
-
     this.parentBoxModel = await getParentNode(_page, querySelector);
+    this.collector.collect(this.viewport, querySelector, property);
 
-    return await _page.evaluate((querySelector, property) => {
-      const element = document.querySelector(querySelector);
-      if (!element) {
-        throw new Error(
-          "Element with querySelector " + querySelector + " not found"
-        );
-      }
-      return JSON.parse(JSON.stringify(getComputedStyle(element)[property]));
-    }, querySelector, property);
+    return await _page.evaluate(
+      (querySelector, property) => {
+        const element = document.querySelector(querySelector);
+        if (!element) {
+          throw new Error(
+            "Element with querySelector " + querySelector + " not found"
+          );
+        }
+        const style = getComputedStyle(element)[property];
+        window.dbg(property, style);
+        return JSON.parse(JSON.stringify(style));
+      },
+      querySelector,
+      property
+    );
   },
-  getPctCSSProperty: async function (querySelector, property) {
+  getPctCSSProperty: async function(querySelector, property) {
     const _page = this.page;
     if (!_page) {
       throw new Error("page is undefined");
     }
 
     this.parentBoxModel = await getParentNode(_page, querySelector);
+    dbg("this.parentBoxModel: " + JSON.stringify(this.parentBoxModel));
+    this.collector.collect(this.viewport, querySelector, property);
 
-    var propValue = await _page.evaluate((querySelector, property) => {
-      const element = document.querySelector(querySelector);
-      if (!element) {
-        throw new Error(
-          "Element with querySelector " + querySelector + " not found"
-        );
-      }
-      return JSON.parse(JSON.stringify(getComputedStyle(element)[property]));
-    }, querySelector, property);
+    var propValue = await _page.evaluate(
+      (querySelector, property) => {
+        const element = document.querySelector(querySelector);
+        if (!element) {
+          throw new Error(
+            "Element with querySelector " + querySelector + " not found"
+          );
+        }
+        const style = getComputedStyle(element)[property];
+        window.dbg(property, style);
+        return JSON.parse(JSON.stringify(style));
+      },
+      querySelector,
+      property
+    );
 
     return cssHelper.pxToPerc(propValue, this.parentBoxModel[property]);
   }
 };
-
 
 async function initBrowser() {
   const browser = await puppeteer.launch();
@@ -112,4 +135,4 @@ async function getParentNode(page, querySelector) {
   } catch (error) {
     return undefined;
   }
-};
+}

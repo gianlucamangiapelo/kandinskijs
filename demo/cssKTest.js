@@ -21,22 +21,17 @@ describe("h2 css test", function() {
     after(async function() {
       await kisk.page.close();
     });
-    it("h2 should have a margin: 0", async function() {
+    it("should have a margin: 0", async function() {
       const margin = await kisk.getCSSProperty("h2", "margin");
       expect(margin).to.eql("0px");
     });
-    it("h2 should have a text-align: center", async function() {
+    it("should have a text-align: center", async function() {
       const margin = await kisk.getCSSProperty("h2", "text-align");
       expect(margin).to.eql("center");
     });
-    it("h2 should have a width: 33%", async function() {
+    it("should have a width: 33%", async function() {
       const width = await kisk.getPctCSSProperty("h2", "width");
       expect(width).to.eql("33%");
-    });
-
-    it("h2 should have a margin-bottom: 15%", async function() {
-      const marginBottom = await kisk.getPctCSSProperty("h2", "marginBottom");
-      expect(marginBottom).to.eql("15%");
     });
   });
 
@@ -48,7 +43,7 @@ describe("h2 css test", function() {
       await kisk.page.close();
     });
 
-    it("h2 should have a display: flex", async function() {
+    it("should have a display: flex", async function() {
       const display = await kisk.getCSSProperty("h2", "display");
       expect(display).to.eql("flex");
     });
@@ -62,7 +57,7 @@ describe("h2 css test", function() {
       await kisk.page.close();
     });
 
-    it("h2 should have a display: block", async function() {
+    it("should have a display: block", async function() {
       const display = await kisk.getCSSProperty("h2", "display");
       expect(display).to.eql("block");
     });
@@ -80,6 +75,11 @@ describe("h2 css test", function() {
     it("should have a margin-top: 20px", async function() {
       const marginTop = await kisk.getCSSProperty("h2", "marginTop");
       expect(marginTop).to.eql("20px");
+    });
+
+    it("should have a margin-bottom: 15%", async function() {
+      const marginBottom = await kisk.getPctCSSProperty("h2", "marginBottom");
+      expect(marginBottom).to.eql("15%");
     });
 
     it("should have a width: 20%", async function() {
