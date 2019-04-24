@@ -4,8 +4,8 @@
   "description": "js library to unit test css",
   "main": "src/kandinski.js",
   "scripts": {
-    "demo-test": "./node_modules/.bin/mocha demo/*KTest.js --timeout 100000",
-    "demo-server": "nodemon demo/index.js",
+    "demo-test": "set DEBUG=kandinskijs* && ./node_modules/.bin/mocha demo/*KTest.js --timeout 100000",
+    "demo-server": "serve demo",
     "test": "./node_modules/.bin/mocha test/*Test.js"
   },
   "repository": {
@@ -27,11 +27,12 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "hapi": "^17.5.0",
     "mocha": "^5.2.0",
+    "serve": "^11.0.0",
     "sinon": "^7.2.7"
   },
   "dependencies": {
+    "debug": "^4.1.1",
     "puppeteer": "^1.12.2"
   }
 }
