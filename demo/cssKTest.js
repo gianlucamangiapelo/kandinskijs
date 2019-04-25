@@ -19,7 +19,7 @@ describe("h2 css test", function() {
       await kisk.getPage({ width: 320, height: 1 });
     });
     after(async function() {
-      await kisk.page.close();
+      await kisk.closePage();
     });
     it("should have a margin: 0", async function() {
       const margin = await kisk.getCSSProperty("h2", "margin");
@@ -40,7 +40,7 @@ describe("h2 css test", function() {
       await kisk.getPage({ width: 768, height: 1 });
     });
     after(async function() {
-      await kisk.page.close();
+      await kisk.closePage();
     });
 
     it("should have a display: flex", async function() {
@@ -54,7 +54,7 @@ describe("h2 css test", function() {
       await kisk.getPage({ width: 1024, height: 1 });
     });
     after(async function() {
-      await kisk.page.close();
+      await kisk.closePage();
     });
 
     it("should have a display: block", async function() {

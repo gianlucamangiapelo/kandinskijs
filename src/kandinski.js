@@ -27,6 +27,13 @@ module.exports = {
     this.collector.destroy();
     this.browser.close();
   },
+  closePage: async function() {
+    if (!this.page) {
+      dbg("this.page is undefined");
+      return;
+    }
+    await this.page.close();
+  },
   getPage: async function(viewport) {
     this.viewport = undefined;
     if (!this.browser) {

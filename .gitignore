@@ -1,4 +1,3 @@
 node_modules
-__logs__/*.json
-__logs__/lcov.info
+__logs__/**/*
 *.log
