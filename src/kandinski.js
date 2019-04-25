@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer");
 const cssHelper = require("./cssHelper");
-const collector = require("./collector");
+const kjsCollector = require("./collector");
 const debug = require("debug");
 const dbg = debug("kandinskijs:main");
 module.exports = {
@@ -11,14 +11,16 @@ module.exports = {
   parentBoxModel: undefined,
   viewport: undefined,
   cssHelper: cssHelper,
-  collector: collector,
-  init: async function(url, cssPath) {
+  collector: undefined,
+  init: async function(suite, url, cssPath) {
     this.browser = await initBrowser();
     this.cssPath = cssPath;
     if (!url) {
       throw new Error("url is undefined");
     }
     this.url = url;
+    this.collector = new kjsCollector(suite);
+    this.collector.cssPath = cssPath;
   },
   destroy: async function() {
     if (!this.browser) {
@@ -63,7 +65,7 @@ module.exports = {
         path: this.cssPath
       });
     }
-    await this.collector.init(page, viewport, this.cssPath);
+    await this.collector.init(page, viewport);
     this.viewport = viewport;
     this.page = page;
   },
@@ -92,7 +94,6 @@ module.exports = {
           );
         }
         const style = getComputedStyle(element)[property];
-        window.dbg(property, style);
         return JSON.parse(JSON.stringify(style));
       },
       querySelector,
@@ -118,7 +119,6 @@ module.exports = {
           );
         }
         const style = getComputedStyle(element)[property];
-        window.dbg(property, style);
         return JSON.parse(JSON.stringify(style));
       },
       querySelector,

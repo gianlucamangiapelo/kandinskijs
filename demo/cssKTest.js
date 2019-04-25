@@ -7,7 +7,7 @@ describe("h2 css test", function() {
   const cssPath = "demo/localBase.css";
 
   before(async function() {
-    await kisk.init(url, cssPath);
+    await kisk.init(this, url, cssPath);
   });
 
   after(async function() {

@@ -4,8 +4,9 @@
   "description": "js library to unit test css",
   "main": "src/kandinski.js",
   "scripts": {
-    "demo-test": "cross-env DEBUG=kandinskijs* mocha demo/*KTest.js --timeout 100000",
+    "demo-test": "cross-env DEBUG=kandinskijs* mocha demo/**/*KTest.js --timeout 100000",
     "demo-server": "serve demo",
+    "demo-report": "cross-env DEBUG=kandinskijs* node demo/report.js",
     "test": "mocha test/*Test.js"
   },
   "repository": {
@@ -34,6 +35,7 @@
   },
   "dependencies": {
     "debug": "^4.1.1",
+    "istanbul": "^0.4.5",
     "puppeteer": "^1.12.2"
   }
 }
