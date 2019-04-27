@@ -21,6 +21,11 @@ describe("h2 css test", function() {
     after(async function() {
       await kisk.closePage();
     });
+
+    it("should have a heading color hex", async function() {
+      const color = await kisk.getCSSProperty("h2", "color");
+      expect(cssHelper.rgbToHex(color)).to.eql("#ffffff");
+    });
     it("should have a margin: 0", async function() {
       const margin = await kisk.getCSSProperty("h2", "margin");
       expect(margin).to.eql("0px");

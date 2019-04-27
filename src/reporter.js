@@ -28,41 +28,58 @@ module.exports = function(opts) {
       const _mappings = loadMappings();
       const { cssPath, maps } = _mappings;
       const result = {};
-      let lastIdx = 0;
       maps.forEach(m => {
-        _map = m["*"];
+        let lastIdx = 0;
         let totalRules = 0;
         let testedRules = 0;
         const code = [];
         const lines = {};
         const stmtMaps = {};
-        for (const selector in _map) {
-          const elmMapping = _map[selector];
-          if (!(elmMapping && elmMapping.props)) {
+        for (const rule in m) {
+          if (rule === "__viewport__") {
             continue;
           }
-          code.push(`${selector}{${elmMapping.cssText}}`);
-          totalRules += elmMapping.props.length;
-          testedRules += elmMapping.props.filter(p => p.hit).length;
-          for (let i = 0; i < elmMapping.props.length; i++) {
-            const prop = elmMapping.props[i];
-            lines[lastIdx + i + 2] = prop.hit || 0;
-            stmtMaps[lastIdx + i + 2] = {
-              start: {
-                column: 1,
-                line: lastIdx + i + 2
-              },
-              end: {
-                column: 100,
-                line: lastIdx + i + 2
-              }
-            };
-            dbg(`lines ${lines}`);
+          _map = m[rule];
+          for (const selector in _map) {
+            const elmMapping = _map[selector];
+            if (!(elmMapping && elmMapping.props)) {
+              continue;
+            }
+            if (rule !== "*") {
+              code.push(`${rule} {`);
+            }
+            code.push(`${selector} {${elmMapping.cssText}}`);
+            totalRules += elmMapping.props.length;
+            testedRules += elmMapping.props.filter(p => p.hit).length;
+            for (let i = 0; i < elmMapping.props.length; i++) {
+              const prop = elmMapping.props[i];
+              lines[lastIdx + i + 2] = prop.hit || 0;
+              stmtMaps[lastIdx + i + 2] = {
+                start: {
+                  column: 0,
+                  line: lastIdx + i + 2
+                },
+                end: {
+                  column: 200,
+                  line: lastIdx + i + 2
+                }
+              };
+              dbg(
+                `${rule} > ${selector} - [${m.__viewport__.width}x${
+                  m.__viewport__.height
+                }] lines ${JSON.stringify(lines)}`
+              );
+            }
+            lastIdx = elmMapping.props.length + 2 + (rule !== "*" ? 2 : 0);
+            if (rule !== "*") {
+              code.push(`}`);
+            }
           }
-          lastIdx = elmMapping.props.length + 1;
         }
         dbg(
-          `Code coverage (tested/total): ${testedRules}/${totalRules} (${(testedRules /
+          `Code coverage [${m.__viewport__.width}x${
+            m.__viewport__.height
+          }] (tested/total): ${testedRules}/${totalRules} (${(testedRules /
             totalRules) *
             100}%)`
         );

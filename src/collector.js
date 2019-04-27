@@ -104,21 +104,26 @@ module.exports = function(opts) {
         dbg(`mapping not found for ${viewport}`);
         return;
       }
-      const allMappings = mappingByViewport["*"];
-      const elmMapping = allMappings[element];
-      if (!elmMapping) {
-        dbg(`${element} not found`);
-        return;
+      for (const rule in mappingByViewport) {
+        if (rule === "__viewport__") {
+          continue;
+        }
+        const _map = mappingByViewport[rule];
+        const elmMapping = _map[element];
+        if (!elmMapping) {
+          dbg(`${rule} > ${element} not found`);
+          continue;
+        }
+        const propMapping = elmMapping.props.find(
+          p => toAlias(p.name) === toAlias(property)
+        );
+        if (!propMapping) {
+          dbg(`${rule} > ${element} > ${property} not found`);
+          continue;
+        }
+        propMapping.hit = propMapping.hit || 0;
+        propMapping.hit++;
       }
-      const propMapping = elmMapping.props.find(
-        p => toAlias(p.name) === toAlias(property)
-      );
-      if (!propMapping) {
-        dbg(`${property} not found`);
-        return;
-      }
-      propMapping.hit = propMapping.hit || 0;
-      propMapping.hit++;
     }
   };
   return _collector;
