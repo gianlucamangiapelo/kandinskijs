@@ -1,6 +1,7 @@
 const puppeteer = require("puppeteer");
 const cssHelper = require("./cssHelper");
 const kjsCollector = require("./collector");
+const collector = new kjsCollector();
 const debug = require("debug");
 const dbg = debug("kandinskijs:main");
 module.exports = {
@@ -8,25 +9,27 @@ module.exports = {
   page: undefined,
   url: undefined,
   cssPath: undefined,
+  suite: undefined,
   parentBoxModel: undefined,
   viewport: undefined,
   cssHelper: cssHelper,
-  collector: undefined,
+  collector: collector,
   init: async function(suite, url, cssPath) {
     this.browser = await initBrowser();
     this.cssPath = cssPath;
+    this.suite = suite;
     if (!url) {
       throw new Error("url is undefined");
     }
     this.url = url;
-    this.collector = new kjsCollector(suite);
-    this.collector.cssPath = cssPath;
   },
   destroy: async function() {
+    if (this.collector) {
+      this.collector.stopCollect();
+    }
     if (!this.browser) {
       return;
     }
-    this.collector.destroy();
     this.browser.close();
   },
   closePage: async function() {
@@ -65,7 +68,12 @@ module.exports = {
         path: this.cssPath
       });
     }
-    await this.collector.init(page, viewport);
+    await this.collector.startCollect({
+      suite: this.suite,
+      cssPath: this.cssPath,
+      page,
+      viewport
+    });
     this.viewport = viewport;
     this.page = page;
   },
@@ -107,7 +115,6 @@ module.exports = {
     }
 
     this.parentBoxModel = await getParentNode(_page, querySelector);
-    dbg("this.parentBoxModel: " + JSON.stringify(this.parentBoxModel));
     this.collector.collect(this.viewport, querySelector, property);
 
     var propValue = await _page.evaluate(

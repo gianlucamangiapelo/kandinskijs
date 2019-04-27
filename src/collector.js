@@ -6,21 +6,27 @@ const path = require("path");
 const toAlias = function(prop) {
   return (prop.indexOf("-") > -1 ? prop.replace("-", "") : prop).toLowerCase();
 };
-module.exports = function(suite) {
+module.exports = function(opts) {
   let outDir = "__logs__/";
-  if (suite && suite.test) {
-    const cwd = path.normalize(process.cwd());
-    const suiteFile = path.parse(suite.test.file);
-    outDir = `${outDir}${suiteFile.name}/`;
-    if (!fs.statSync(`${outDir}`)) {
-      fs.mkdirSync(`${outDir}`);
-    }
-  }
-  const reporter = new kjsReporter({ outDir });
+  let reporter = undefined;
   const _collector = {
-    mappings: undefined,
+    mappings: { cssPath: undefined, maps: [] },
+    suite: undefined,
     cssPath: undefined,
-    init: async function(page, viewport) {
+    viewport: undefined,
+    startCollect: async function(opts) {
+      const { suite, cssPath, page, viewport } = opts;
+      outDir = "__logs__/";
+      this.mappings.cssPath = cssPath;
+      if (suite && suite.test) {
+        const cwd = path.normalize(process.cwd());
+        const suiteFile = path.parse(suite.test.file);
+        outDir = `${outDir}${suiteFile.name}/`;
+        if (!fs.existsSync(`${outDir}`)) {
+          fs.mkdirSync(`${outDir}`);
+        }
+      }
+      reporter = new kjsReporter({ outDir });
       await page._client.send("DOM.enable");
       await page._client.send("CSS.enable");
       const doc = await page._client.send("DOM.getFlattenedDocument");
@@ -37,7 +43,9 @@ module.exports = function(suite) {
           })
         );
       }
-      const mappings = {};
+      const mappings = {
+        __viewport__: viewport
+      };
       for (style of stylesForNodes) {
         const matchedRules = style.matchedCSSRules;
         const regularRules = matchedRules.filter(
@@ -69,32 +77,44 @@ module.exports = function(suite) {
         });
       }
       var result = JSON.stringify(stylesForNodes, null, 2);
-      fs.writeFileSync(
-        `${outDir}log_full_${viewport.width}_${viewport.height}.json`,
-        result
-      );
-      this.mappings = mappings;
-      fs.writeFileSync(
-        `${outDir}log_${viewport.width}_${viewport.height}.json`,
-        JSON.stringify(mappings, null, 2)
-      );
+
+      /* uncomment those line to see output from mapping and from page */
+      // fs.writeFileSync(
+      //   `${outDir}log_full_${viewport.width}_${viewport.height}.json`,
+      //   result
+      // );
+      // fs.writeFileSync(
+      //   `${outDir}log_${viewport.width}_${viewport.height}.json`,
+      //   JSON.stringify(mappings, null, 2)
+      // );
+
+      this.mappings.maps.push(mappings);
     },
-    destroy: function() {
+    stopCollect: function() {
       reporter.writeMappings(this.mappings);
     },
 
     collect: function(viewport, element, property) {
-      const allMappings = this.mappings["*"];
+      const mappingByViewport = this.mappings.maps.find(
+        m =>
+          m.__viewport__.width === viewport.width &&
+          m.__viewport__.height === viewport.height
+      );
+      if (!mappingByViewport) {
+        dbg(`mapping not found for ${viewport}`);
+        return;
+      }
+      const allMappings = mappingByViewport["*"];
       const elmMapping = allMappings[element];
       if (!elmMapping) {
-        dbg(element, "not found");
+        dbg(`${element} not found`);
         return;
       }
       const propMapping = elmMapping.props.find(
         p => toAlias(p.name) === toAlias(property)
       );
       if (!propMapping) {
-        dbg(property, "not found");
+        dbg(`${property} not found`);
         return;
       }
       propMapping.hit = propMapping.hit || 0;
