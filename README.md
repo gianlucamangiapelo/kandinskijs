@@ -23,7 +23,7 @@ describe("component css test", function() {
   const localCssPath = "path/local.css";
 
   before(async function() {
-    await kisk.init(url, localCssPath);
+    await kisk.init(this, url, localCssPath);
   });
 
   after(async function() {
