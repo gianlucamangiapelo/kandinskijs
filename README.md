@@ -57,7 +57,7 @@ Run the [demo](#demo) locally to try it on your local machine.
 Initialize kandinskijs with the URL you want to test and inject to the downloaded page your local CSS version.
 
 ```javascript
-.init(url, cssPath)
+.init(suite, url, cssPath)
 ```
 
 **destroy** -
@@ -120,8 +120,8 @@ Provide helper methods to:
 
 You can find demo files under **/demo** folder.
 
-- `<div><h2>Kandinskijs</h2></div>` HTML element to be tested.
-- local CSS defined in `localBase.css`.
+- `index.html` contains the HTML to be tested
+- local CSS defined in `localBase.css`
 - test suite, using kandinskijs, is defined in `cssTest.js`
 
 ### start the local server
