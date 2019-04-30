@@ -98,7 +98,7 @@ module.exports = {
         const element = document.querySelector(querySelector);
         if (!element) {
           throw new Error(
-            "Element with querySelector " + querySelector + " not found"
+            `Element with querySelector ${querySelector} not found`
           );
         }
         const style = getComputedStyle(element)[property];
@@ -122,7 +122,7 @@ module.exports = {
         const element = document.querySelector(querySelector);
         if (!element) {
           throw new Error(
-            "Element with querySelector " + querySelector + " not found"
+            `Element with querySelector ${querySelector} not found`
           );
         }
         const style = getComputedStyle(element)[property];

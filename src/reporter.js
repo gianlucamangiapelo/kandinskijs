@@ -28,13 +28,12 @@ module.exports = function(opts) {
       const _mappings = loadMappings();
       const { cssPath, maps } = _mappings;
       const result = {};
+      let totalRules = 0;
+      let testedRules = 0;
+      const code = fs.readFileSync(cssPath, "utf8");
+      const lines = {};
+      const stmtMaps = {};
       maps.forEach(m => {
-        let lastIdx = 0;
-        let totalRules = 0;
-        let testedRules = 0;
-        const code = [];
-        const lines = {};
-        const stmtMaps = {};
         for (const rule in m) {
           if (rule === "__viewport__") {
             continue;
@@ -45,54 +44,36 @@ module.exports = function(opts) {
             if (!(elmMapping && elmMapping.props)) {
               continue;
             }
-            if (rule !== "*") {
-              code.push(`${rule} {`);
-            }
-            code.push(`${selector} {${elmMapping.cssText}}`);
             totalRules += elmMapping.props.length;
             testedRules += elmMapping.props.filter(p => p.hit).length;
             for (let i = 0; i < elmMapping.props.length; i++) {
               const prop = elmMapping.props[i];
-              lines[lastIdx + i + 2] = prop.hit || 0;
-              stmtMaps[lastIdx + i + 2] = {
+              lines[prop.range.startLine + 1] =
+                lines[prop.range.startLine + 1] || 0;
+              lines[prop.range.startLine + 1] += prop.hit || 0;
+              stmtMaps[prop.range.startLine + 1] = {
                 start: {
-                  column: 0,
-                  line: lastIdx + i + 2
+                  column: prop.range.startColumn,
+                  line: prop.range.startLine + 1
                 },
                 end: {
-                  column: 200,
-                  line: lastIdx + i + 2
+                  column: prop.range.endColumn,
+                  line: prop.range.endLine + 1
                 }
               };
-              dbg(
-                `${rule} > ${selector} - [${m.__viewport__.width}x${
-                  m.__viewport__.height
-                }] lines ${JSON.stringify(lines)}`
-              );
-            }
-            lastIdx = elmMapping.props.length + 2 + (rule !== "*" ? 2 : 0);
-            if (rule !== "*") {
-              code.push(`}`);
             }
           }
         }
-        dbg(
-          `Code coverage [${m.__viewport__.width}x${
-            m.__viewport__.height
-          }] (tested/total): ${testedRules}/${totalRules} (${(testedRules /
-            totalRules) *
-            100}%)`
-        );
-        result[`viewports/${m.__viewport__.width}x${m.__viewport__.height}`] = {
-          path: cssPath,
-          code,
-          s: lines,
-          statementMap: stmtMaps,
-          l: lines,
-          f: {},
-          b: {}
-        };
       });
+      result[cssPath] = {
+        path: cssPath,
+        code,
+        s: lines,
+        statementMap: stmtMaps,
+        l: lines,
+        f: {},
+        b: {}
+      };
       return result;
     },
     writeReport: function(reportDoneCallback) {
@@ -103,7 +84,6 @@ module.exports = function(opts) {
       const collector = new Collector();
       collector.add(this.generateCoverageObject());
       report.on("done", function() {
-        dbg("done");
         if (reportDoneCallback) {
           reportDoneCallback();
         }

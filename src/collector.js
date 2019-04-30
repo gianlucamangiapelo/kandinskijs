@@ -59,21 +59,24 @@ module.exports = function(opts) {
               text: "*"
             });
           }
-          mappings[media[0].text] = mappings[media[0].text] || {};
-          mappings[media[0].text][selector] = mappings[media[0].text][
-            selector
-          ] || {
+          const map = mappings[media[0].text] || {};
+          map[selector] = map[selector] || {
             cssText: r.rule.style.cssText,
             props: []
           };
           r.rule.style.cssProperties.forEach(prop => {
-            mappings[media[0].text][selector].props.push({
+            if (!prop.range) {
+              return;
+            }
+            map[selector].props.push({
               name: prop.name,
               value: prop.value,
               text: prop.text,
-              alias: toAlias(prop.name)
+              alias: toAlias(prop.name),
+              range: prop.range
             });
           });
+          mappings[media[0].text] = map;
         });
       }
       var result = JSON.stringify(stylesForNodes, null, 2);
