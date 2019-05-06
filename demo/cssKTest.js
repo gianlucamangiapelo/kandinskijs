@@ -27,16 +27,16 @@ describe("h2 css test", function() {
       expect(cssHelper.rgbToHex(color)).to.eql("#ffffff");
     });
     it("should have height:100%", async function() {
-      const margin = await kisk.getCSSProperty("h2", "height");
-      expect(margin).to.eql("100%");
+      const height = await kisk.getPctCSSProperty("h2", "height");
+      expect(height).to.eql("100%");
     });
     it("should have a margin: 0", async function() {
       const margin = await kisk.getCSSProperty("h2", "margin");
       expect(margin).to.eql("0px");
     });
     it("should have a text-align: center", async function() {
-      const margin = await kisk.getCSSProperty("h2", "text-align");
-      expect(margin).to.eql("center");
+      const textAlign = await kisk.getCSSProperty("h2", "text-align");
+      expect(textAlign).to.eql("center");
     });
     it("should have a width: 33%", async function() {
       const width = await kisk.getPctCSSProperty("h2", "width");
@@ -110,8 +110,7 @@ describe("h2 css test", function() {
       expect(fontSize).to.eql("64px");
     });
     it("should have a heading text = What a wonderful test!", async function() {
-      const HEADING_SELECTOR = "h2";
-      const headingText = await kisk.getInnerText(HEADING_SELECTOR);
+      const headingText = await kisk.getInnerText("h2");
       expect(headingText).to.eql("What a wonderful test!");
     });
   });
