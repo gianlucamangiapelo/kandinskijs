@@ -94,7 +94,9 @@ module.exports = function(opts) {
       this.mappings.maps.push(mappings);
     },
     stopCollect: function() {
-      reporter.writeMappings(this.mappings);
+      if (reporter) {
+        reporter.writeMappings(this.mappings);
+      }
     },
 
     collect: function(viewport, element, property) {
