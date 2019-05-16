@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer");
-const cssHelper = require("./cssHelper");
-const kjsCollector = require("./collector");
+const cssHelper = require("./helper/cssHelper");
+const kjsCollector = require("./reporter/collector");
 const collector = new kjsCollector();
 const debug = require("debug");
 const dbg = debug("kandinskijs:main");
