@@ -1,6 +1,7 @@
 # kandinski.js
 
 js library to unit test css.
+css code coverage reports included!
 
 ## Why kandinski.js
 
@@ -140,6 +141,14 @@ Open another CLI and run CSS unit tests:
 $ yarn run demo-test
 ```
 
+### run the demo code coverage report
+
+```
+$ yarn run demo-report
+```
+You will find the the report under **__logs__/cssKTest/lcov-report/demo/**
+
+
 The demo test suite uses _Mocha_ & _Chai_.
 
 ## Contributing
@@ -149,7 +158,3 @@ Please read [CONTRIBUTING.md](https://github.com/gian8/kandinskijs/blob/master/C
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/gian8/kandinskijs/blob/master/LICENSE) file for details
-
-_Future implementation:_
-
-- Add css code coverage index
