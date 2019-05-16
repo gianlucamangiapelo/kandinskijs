@@ -1,6 +1,7 @@
 # kandinski.js
 
 js library to unit test css.
+css code coverage reports included!
 
 ## Why kandinski.js
 
@@ -23,7 +24,7 @@ describe("component css test", function() {
   const localCssPath = "path/local.css";
 
   before(async function() {
-    await kisk.init(url, localCssPath);
+    await kisk.init(this, url, localCssPath);
   });
 
   after(async function() {
@@ -57,7 +58,7 @@ Run the [demo](#demo) locally to try it on your local machine.
 Initialize kandinskijs with the URL you want to test and inject to the downloaded page your local CSS version.
 
 ```javascript
-.init(url, cssPath)
+.init(suite, url, cssPath)
 ```
 
 **destroy** -
@@ -120,8 +121,8 @@ Provide helper methods to:
 
 You can find demo files under **/demo** folder.
 
-- `<div><h2>Kandinskijs</h2></div>` HTML element to be tested.
-- local CSS defined in `localBase.css`.
+- `index.html` contains the HTML to be tested
+- local CSS defined in `localBase.css`
 - test suite, using kandinskijs, is defined in `cssTest.js`
 
 ### start the local server
@@ -140,6 +141,14 @@ Open another CLI and run CSS unit tests:
 $ yarn run demo-test
 ```
 
+### run the demo code coverage report
+
+```
+$ yarn run demo-report
+```
+You will find the the report under **__logs__/cssKTest/lcov-report/demo/**
+
+
 The demo test suite uses _Mocha_ & _Chai_.
 
 ## Contributing
@@ -149,7 +158,3 @@ Please read [CONTRIBUTING.md](https://github.com/gian8/kandinskijs/blob/master/C
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/gian8/kandinskijs/blob/master/LICENSE) file for details
-
-_Future implementation:_
-
-- Add css code coverage index
