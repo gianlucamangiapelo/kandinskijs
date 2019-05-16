@@ -16,7 +16,7 @@ describe("h2 css test", function() {
 
   context("mobile viewport", function() {
     before(async function() {
-      await kisk.getPage({ width: 320, height: 1 });
+      await kisk.getPage({ width: 320, height: 568 });
     });
     after(async function() {
       await kisk.closePage();
@@ -54,7 +54,7 @@ describe("h2 css test", function() {
 
   context("tablet viewport", function() {
     before(async function() {
-      await kisk.getPage({ width: 768, height: 1 });
+      await kisk.getPage({ width: 768, height: 1024 });
     });
     after(async function() {
       await kisk.closePage();
@@ -68,7 +68,7 @@ describe("h2 css test", function() {
 
   context("desktop viewport", function() {
     before(async function() {
-      await kisk.getPage({ width: 1024, height: 1 });
+      await kisk.getPage({ width: 1024, height: 2480 });
     });
     after(async function() {
       await kisk.closePage();
@@ -94,11 +94,6 @@ describe("h2 css test", function() {
       expect(marginTop).to.eql("20px");
     });
 
-    it("should have a margin-bottom: 15%", async function() {
-      const marginBottom = await kisk.getPctCSSProperty("h2", "marginBottom");
-      expect(marginBottom).to.eql("15%");
-    });
-
     it("should have a width: 20%", async function() {
       const widthPx = await kisk.getCSSProperty("h2", "width");
       const widthPerc = cssHelper.pxToPerc(widthPx, kisk.parentBoxModel.width);
@@ -109,6 +104,7 @@ describe("h2 css test", function() {
       const fontSize = await kisk.getCSSProperty("h2", "fontSize");
       expect(fontSize).to.eql("64px");
     });
+
     it("should have a heading text = What a wonderful test!", async function() {
       const headingText = await kisk.getInnerText("h2");
       expect(headingText).to.eql("What a wonderful test!");
