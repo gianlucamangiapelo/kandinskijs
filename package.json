@@ -1,7 +1,7 @@
 {
   "name": "kandinskijs",
   "version": "1.1.2",
-  "description": "js library to unit test css",
+  "description": "js library to unit test css and generate code coverage report",
   "main": "src/kandinski.js",
   "scripts": {
     "demo-test": "cross-env DEBUG=kandinskijs* mocha demo/**/*KTest.js --timeout 100000",
@@ -17,7 +17,9 @@
     "kandinskijs",
     "kandinski",
     "unit-test",
-    "css"
+    "css",
+    "css code coverage",
+    "code coverage report"
   ],
   "author": "Gianluca Mangiapelo",
   "license": "MIT",
