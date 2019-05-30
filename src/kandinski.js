@@ -58,7 +58,7 @@ module.exports = {
     }
 
     const page = await this.browser.newPage();
-    page.on("console", msg => console.log("PAGE LOG:", msg.text));
+    page.on("console", msg => console.log("PAGE LOG:", msg.text()));
     await page.exposeFunction("dbg", dbg);
 
     await page.setViewport(viewport);
