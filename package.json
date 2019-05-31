@@ -7,7 +7,9 @@
     "demo-test": "cross-env DEBUG=kandinskijs* mocha demo/**/*KTest.js --timeout 100000",
     "demo-server": "serve demo",
     "demo-report": "cross-env DEBUG=kandinskijs* node demo/report.js",
-    "test": "mocha test/*Test.js"
+    "test": "mocha test/*Test.js",
+    "demo-stress-test": "cross-env DEBUG=kandinskijs* mocha demo-stress/**/*KTest.js --timeout 100000",
+    "demo-stress-report": "cross-env DEBUG=kandinskijs* node demo-stress/report.js"
   },
   "repository": {
     "type": "git",
