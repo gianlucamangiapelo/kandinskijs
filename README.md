@@ -1,7 +1,7 @@
 # kandinski.js
 
-js library to unit test css.
-css code coverage reports included!
+The JS library to unit test CSS.
+CSS code coverage reports **NOW** included!
 
 ## Why kandinski.js
 
@@ -146,8 +146,8 @@ $ yarn run demo-test
 ```
 $ yarn run demo-report
 ```
-You will find the the report under **__logs__/cssKTest/lcov-report/demo/**
 
+You will find the the report under \***\*logs**/cssKTest/lcov-report/demo/\*\*
 
 The demo test suite uses _Mocha_ & _Chai_.
 
