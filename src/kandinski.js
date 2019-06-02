@@ -58,8 +58,8 @@ module.exports = {
     }
 
     const page = await this.browser.newPage();
-    page.on("console", msg => console.log("PAGE LOG:", msg.text()));
     await page.exposeFunction("dbg", dbg);
+    page.on("console", msg => dbg(`console: ${msg.text()}`));
 
     await page.setViewport(viewport);
     await page.goto(this.url);

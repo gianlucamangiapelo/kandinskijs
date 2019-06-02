@@ -3,6 +3,13 @@ const kjsReporter = require("./reporter");
 const debug = require("debug");
 const dbg = debug("kandinskijs:collector");
 const path = require("path");
+const { PerformanceObserver, performance } = require("perf_hooks");
+const obs = new PerformanceObserver(items => {
+  dbg(items.getEntries()[0].duration);
+  performance.clearMarks();
+});
+obs.observe({ entryTypes: ["measure"] });
+
 const toAlias = function(prop) {
   return (prop.indexOf("-") > -1 ? prop.replace("-", "") : prop).toLowerCase();
 };
@@ -15,6 +22,7 @@ module.exports = function(opts) {
     cssPath: undefined,
     viewport: undefined,
     startCollect: async function(opts) {
+      performance.mark("startCollect.begin");
       const { suite, cssPath, page, viewport } = opts;
       outDir = "__logs__/";
       this.mappings.cssPath = cssPath;
@@ -31,18 +39,20 @@ module.exports = function(opts) {
       await page._client.send("CSS.enable");
       const doc = await page._client.send("DOM.getFlattenedDocument");
       const nodes = doc.nodes;
-      const stylesForNodes = [];
+      const promises = [];
       for (n in nodes) {
         const node = nodes[n];
         if (!(node.nodeType === 1)) {
           continue;
         }
-        stylesForNodes.push(
-          await page._client.send("CSS.getMatchedStylesForNode", {
+        promises.push(
+          page._client.send("CSS.getMatchedStylesForNode", {
             nodeId: node.nodeId
           })
         );
       }
+
+      const stylesForNodes = await Promise.all(promises);
       const mappings = {
         __viewport__: viewport
       };
@@ -51,7 +61,9 @@ module.exports = function(opts) {
         const regularRules = matchedRules.filter(
           r => r.rule.origin !== "user-agent"
         );
-        regularRules.forEach(r => {
+        const regularRulesLength = regularRules.length;
+        for (let i = regularRulesLength - 1; i >= 0; i--) {
+          const r = regularRules[i];
           const selector = r.rule.selectorList.text;
           const media = r.rule.media || [];
           if (!media.length) {
@@ -64,9 +76,11 @@ module.exports = function(opts) {
             cssText: r.rule.style.cssText,
             props: []
           };
-          r.rule.style.cssProperties.forEach(prop => {
+          const cssPropertiesLength = r.rule.style.cssProperties.length;
+          for (let j = cssPropertiesLength - 1; j >= 0; j--) {
+            const prop = r.rule.style.cssProperties[j];
             if (!prop.range) {
-              return;
+              continue;
             }
             map[selector].props.push({
               name: prop.name,
@@ -75,13 +89,13 @@ module.exports = function(opts) {
               alias: toAlias(prop.name),
               range: prop.range
             });
-          });
+          }
           mappings[media[0].text] = map;
-        });
+        }
       }
-      var result = JSON.stringify(stylesForNodes, null, 2);
 
       /* uncomment those line to see output from mapping and from page */
+      // var result = JSON.stringify(stylesForNodes);
       // fs.writeFileSync(
       //   `${outDir}log_full_${viewport.width}_${viewport.height}.json`,
       //   result
@@ -92,6 +106,12 @@ module.exports = function(opts) {
       // );
 
       this.mappings.maps.push(mappings);
+      performance.mark("startCollect.end");
+      performance.measure(
+        "startCollect",
+        "startCollect.begin",
+        "startCollect.end"
+      );
     },
     stopCollect: function() {
       if (reporter) {
