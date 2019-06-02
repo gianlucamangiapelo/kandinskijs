@@ -91,6 +91,7 @@ module.exports = {
       throw new Error("page is undefined");
     }
     this.parentBoxModel = await getParentNode(_page, querySelector);
+    await this.collector.store(this.viewport, querySelector);
     this.collector.collect(this.viewport, querySelector, property);
 
     return await _page.evaluate(
@@ -115,6 +116,7 @@ module.exports = {
     }
 
     this.parentBoxModel = await getParentNode(_page, querySelector);
+    await this.collector.store(this.viewport, querySelector);
     this.collector.collect(this.viewport, querySelector, property);
 
     var propValue = await _page.evaluate(
