@@ -39,9 +39,10 @@ module.exports = function(opts) {
       await page._client.send("CSS.enable");
       const doc = await page._client.send("DOM.getFlattenedDocument");
       const nodes = doc.nodes;
+      const nodesLength = nodes.length;
       const promises = [];
-      for (n in nodes) {
-        const node = nodes[n];
+      for (let i = nodesLength - 1; i >= 0; i--) {
+        const node = nodes[i];
         if (!(node.nodeType === 1)) {
           continue;
         }
