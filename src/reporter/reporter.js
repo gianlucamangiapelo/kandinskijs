@@ -3,6 +3,7 @@ const istanbul = require("istanbul");
 const debug = require("debug");
 const dbg = debug("kandinskijs:reporter");
 const FALLBACK_MAPPINGS = { "*": {} };
+
 module.exports = function(opts) {
   let _mappings = Object.assign({}, FALLBACK_MAPPINGS);
   const outDir = (opts || {}).outDir || "__logs__/";
