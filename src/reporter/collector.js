@@ -7,6 +7,7 @@ const path = require("path");
 const toAlias = function(prop) {
   return (prop.indexOf("-") > -1 ? prop.replace("-", "") : prop).toLowerCase();
 };
+
 module.exports = function(opts) {
   let outDir = "__logs__/";
   let reporter = undefined;
@@ -106,7 +107,7 @@ module.exports = function(opts) {
         return;
       }
       for (const rule in mappingByViewport) {
-        if (rule === "__viewport__") {
+        if (rule === "__viewport__") { //to-do: || rule === "*"
           continue;
         }
         const _map = mappingByViewport[rule];
