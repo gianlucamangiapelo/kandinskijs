@@ -4,6 +4,7 @@ const kjsCollector = require("./reporter/collector");
 const collector = new kjsCollector();
 const debug = require("debug");
 const dbg = debug("kandinskijs:main");
+
 module.exports = {
   browser: undefined,
   page: undefined,
@@ -90,6 +91,7 @@ module.exports = {
     if (!_page) {
       throw new Error("page is undefined");
     }
+
     this.parentBoxModel = await getParentNode(_page, querySelector);
     await this.collector.store(this.viewport, querySelector);
     this.collector.collect(this.viewport, querySelector, property);
