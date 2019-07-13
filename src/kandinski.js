@@ -4,6 +4,7 @@ const kjsCollector = require("./reporter/collector");
 const collector = new kjsCollector();
 const debug = require("debug");
 const dbg = debug("kandinskijs:main");
+
 module.exports = {
   browser: undefined,
   page: undefined,
@@ -58,8 +59,8 @@ module.exports = {
     }
 
     const page = await this.browser.newPage();
-    page.on("console", msg => console.log("PAGE LOG:", msg.text()));
     await page.exposeFunction("dbg", dbg);
+    page.on("console", msg => dbg(`console: ${msg.text()}`));
 
     await page.setViewport(viewport);
     await page.goto(this.url);
@@ -90,7 +91,9 @@ module.exports = {
     if (!_page) {
       throw new Error("page is undefined");
     }
+
     this.parentBoxModel = await getParentNode(_page, querySelector);
+    await this.collector.store(this.viewport, querySelector);
     this.collector.collect(this.viewport, querySelector, property);
 
     return await _page.evaluate(
@@ -115,6 +118,7 @@ module.exports = {
     }
 
     this.parentBoxModel = await getParentNode(_page, querySelector);
+    await this.collector.store(this.viewport, querySelector);
     this.collector.collect(this.viewport, querySelector, property);
 
     var propValue = await _page.evaluate(

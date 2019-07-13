@@ -3,6 +3,7 @@ const istanbul = require("istanbul");
 const debug = require("debug");
 const dbg = debug("kandinskijs:reporter");
 const FALLBACK_MAPPINGS = { "*": {} };
+
 module.exports = function(opts) {
   let _mappings = Object.assign({}, FALLBACK_MAPPINGS);
   const outDir = (opts || {}).outDir || "__logs__/";
@@ -28,8 +29,6 @@ module.exports = function(opts) {
       const _mappings = loadMappings();
       const { cssPath, maps } = _mappings;
       const result = {};
-      let totalRules = 0;
-      let testedRules = 0;
       const code = fs.readFileSync(cssPath, "utf8");
       const lines = {};
       const stmtMaps = {};
@@ -44,9 +43,8 @@ module.exports = function(opts) {
             if (!(elmMapping && elmMapping.props)) {
               continue;
             }
-            totalRules += elmMapping.props.length;
-            testedRules += elmMapping.props.filter(p => p.hit).length;
-            for (let i = 0; i < elmMapping.props.length; i++) {
+            const propsLength = elmMapping.props.length;
+            for (let i = propsLength - 1; i >= 0; i--) {
               const prop = elmMapping.props[i];
               lines[prop.range.startLine + 1] =
                 lines[prop.range.startLine + 1] || 0;
