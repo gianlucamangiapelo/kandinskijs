@@ -7,11 +7,14 @@ const FALLBACK_MAPPINGS = { "*": {} };
 module.exports = function(opts) {
   let _mappings = Object.assign({}, FALLBACK_MAPPINGS);
   const outDir = (opts || {}).outDir || "__logs__/";
-  const getMappingFilePath = function() {
-    return `${outDir}log_mappings.json`;
+  const singleDir = (opts || {}).singleDir || false;
+  const getMappingFilePath = function(dir) {
+    const _outDir = dir || outDir;
+    dbg(`_outDir ${_outDir}`);
+    return `${_outDir}log_mappings.json`;
   };
-  const loadMappings = function() {
-    const mappingFilePath = getMappingFilePath();
+  const loadMappings = function(dir) {
+    const mappingFilePath = getMappingFilePath(dir);
     if (!fs.existsSync(mappingFilePath)) {
       dbg(`mappings file not found: ${mappingFilePath}`);
       return FALLBACK_MAPPINGS;
@@ -19,7 +22,10 @@ module.exports = function(opts) {
     return JSON.parse(fs.readFileSync(mappingFilePath, "utf8"));
   };
   const getSubDirectories = function(source) {
-    fs.readdirSync(source);
+    if (singleDir) {
+      return [""];
+    }
+    return fs.readdirSync(source);
   };
 
   return {
@@ -29,8 +35,8 @@ module.exports = function(opts) {
         JSON.stringify(mappings || FALLBACK_MAPPINGS, null, 2)
       );
     },
-    generateCoverageObject: function() {
-      const _mappings = loadMappings();
+    generateCoverageObject: function(dir) {
+      const _mappings = loadMappings(dir);
       const { cssPath, maps } = _mappings;
       const result = {};
       const code = fs.readFileSync(cssPath, "utf8");
@@ -79,18 +85,24 @@ module.exports = function(opts) {
       return result;
     },
     writeReport: function(reportDoneCallback) {
-      const report = istanbul.Report.create("lcov", {
-        dir: `./${outDir}`
-      });
-      const Collector = istanbul.Collector;
-      const collector = new Collector();
-      collector.add(this.generateCoverageObject());
-      report.on("done", function() {
-        if (reportDoneCallback) {
-          reportDoneCallback();
-        }
-      });
-      report.writeReport(collector);
+      var subDirs = getSubDirectories(outDir);
+
+      for (let i = 0; i < subDirs.length; i++) {
+
+        const _outDir = `${outDir}${subDirs[i]}/`;
+        const report = istanbul.Report.create("lcov", {
+          dir: `./${_outDir}`
+        });
+        const Collector = istanbul.Collector;
+        const collector = new Collector();
+        collector.add(this.generateCoverageObject(_outDir));
+        report.on("done", function() {
+          if (reportDoneCallback) {
+            reportDoneCallback();
+          }
+        });
+        report.writeReport(collector);
+      }
     }
   };
 };
