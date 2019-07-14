@@ -18,6 +18,10 @@ module.exports = function(opts) {
     }
     return JSON.parse(fs.readFileSync(mappingFilePath, "utf8"));
   };
+  const getSubDirectories = function(source) {
+    fs.readdirSync(source);
+  };
+
   return {
     writeMappings: function(mappings) {
       fs.writeFileSync(
