@@ -57,7 +57,7 @@ module.exports = function(opts) {
       );
       this.storeCache[querySelector] = 1;
       const mappings = {
-        __viewport__: viewport
+
       };
       const matchedRules = style.matchedCSSRules;
       const regularRules = matchedRules.filter(
@@ -73,6 +73,8 @@ module.exports = function(opts) {
             text: "*"
           });
         }
+        // insert * in text propt for all style not in mediaquery
+
         const map = mappings[media[0].text] || {};
         map[selector] = map[selector] || {
           cssText: r.rule.style.cssText,
@@ -97,30 +99,34 @@ module.exports = function(opts) {
       this.mappings.maps.push(mappings);
     },
     collect: function(viewport, querySelector, property) {
-      const mappingByViewport = this.mappings.maps.find(
-        m =>
-          m.__viewport__.width === viewport.width &&
-          m.__viewport__.height === viewport.height
-      );
-      if (!mappingByViewport) {
-        dbg(`mapping not found for ${viewport}`);
+
+      const mappingByRule = this.mappings.maps.find(m => {
+        let mapKeys = Object.keys(m);
+        for (var mK of mapKeys) {
+          let rule = m[mK];
+          ruleKeys = Object.keys(rule);
+          for (const ruleK of ruleKeys) {
+            return ruleK == querySelector;
+          }
+        }
+      });
+
+      if (!mappingByRule) {
+        dbg(`mapping not found for ${viewport} and ${querySelector}`);
         return;
       }
-      for (const rule in mappingByViewport) {
-        if (rule === "__viewport__") { //to-do: || rule === "*"
-          continue;
-        }
-        const _map = mappingByViewport[rule];
+      for (const rule in mappingByRule) {
+        const _map = mappingByRule[rule];
         const elmMapping = _map[querySelector];
         if (!elmMapping) {
-          dbg(`${rule} > ${querySelector} not found`);
+          dbg(`${rule} > ${querySelector} is not present`);
           continue;
         }
         const propMappings = elmMapping.props.filter(
           p => toAlias(p.name) === toAlias(property)
         );
         if (!propMappings.length) {
-          dbg(`${rule} > ${querySelector} > ${property} not found`);
+          dbg(`${rule} > ${querySelector} > ${property} is not present`);
           continue;
         }
         propMappings.forEach(p => {
