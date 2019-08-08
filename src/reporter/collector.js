@@ -56,9 +56,7 @@ module.exports = function(opts) {
         }
       );
       this.storeCache[querySelector] = 1;
-      const mappings = {
-
-      };
+      const mappings = {};
       const matchedRules = style.matchedCSSRules;
       const regularRules = matchedRules.filter(
         r => r.rule.origin !== "user-agent"
@@ -73,7 +71,7 @@ module.exports = function(opts) {
             text: "*"
           });
         }
-        // insert * in text propt for all style not in mediaquery
+        // "*" used for all styles not in a mediaquery
 
         const map = mappings[media[0].text] || {};
         map[selector] = map[selector] || {
@@ -112,7 +110,7 @@ module.exports = function(opts) {
       });
 
       if (!mappingByRule) {
-        dbg(`mapping not found for ${viewport} and ${querySelector}`);
+        dbg(`mapping not found for selector: ${querySelector} in viewport: ${viewport}`);
         return;
       }
       for (const rule in mappingByRule) {
