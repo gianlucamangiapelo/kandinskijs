@@ -65,6 +65,12 @@ module.exports = function(opts) {
       for (let i = regularRulesLength - 1; i >= 0; i--) {
         const r = regularRules[i];
         const selector = r.rule.selectorList.text;
+
+        //consider only querySelector under test with all selector in page
+        if (selector != querySelector) {
+          continue;
+        }
+
         const media = r.rule.media || [];
         if (!media.length) {
           media.push({
@@ -74,6 +80,7 @@ module.exports = function(opts) {
         // "*" used for all styles not in a mediaquery
 
         const map = mappings[media[0].text] || {};
+
         map[selector] = map[selector] || {
           cssText: r.rule.style.cssText,
           props: []
