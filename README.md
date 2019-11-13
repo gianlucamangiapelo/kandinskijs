@@ -5,7 +5,7 @@ CSS code coverage reports **NOW** included!
 
 ## Why kandinski.js
 
-Why not!
+Why not!?
 The main goal of kandinski.js is to use the power and stability of TDD to test your Application CSS and avoid unexpected issues or regression.
 
 ### Installing
