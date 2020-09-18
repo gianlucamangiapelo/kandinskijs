@@ -14,5 +14,8 @@
   "javascript.validate.enable": false,
   "javascript.format.insertSpaceBeforeFunctionParenthesis": false,
   "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
-  "eslint.autoFixOnSave": true
+  "eslint.autoFixOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }
