@@ -1,3 +1,4 @@
 node_modules
 __logs__/**/*
 *.log
+.scannerwork/**/*

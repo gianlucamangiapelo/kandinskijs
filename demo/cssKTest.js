@@ -1,13 +1,12 @@
 var expect = require("chai").expect;
 const kisk = require("../src/kandinski");
+const Kconfig = require("./KConfig.json");
 const cssHelper = kisk.cssHelper;
 
 describe("h2 css test", function() {
-  const url = "http://localhost:5000";
-  const cssPath = "demo/localBase.css";
 
   before(async function() {
-    await kisk.init(this, url, cssPath);
+    await kisk.init(this, Kconfig.baseUrl, Kconfig.cssPath);
   });
 
   after(async function() {
